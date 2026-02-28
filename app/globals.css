@@ -3,6 +3,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --canvas: 251 251 250; /* #FBFBFA */
+  --ink: 11 18 32; /* #0B1220 */
+  --muted: 115 115 115; /* neutral-ish */
+  --surface: 255 255 255; /* white */
+  --surface-2: 245 246 248; /* soft gray */
+  --border: 15 23 42; /* slate-ish */
+  --accent: 16 185 129; /* emerald-500 */
+  --accent-2: 5 150 105; /* emerald-600 */
 }
 
 @theme inline {

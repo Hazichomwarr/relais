@@ -3,382 +3,43 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { BRAND, COPY } from "@/lib/copy";
+import Image from "next/image";
 
-type Lang = "fr" | "en";
-
-const BRAND = {
-  name: "Relais",
-  domain: "relaisplatform.com",
-  email: "contact@relaisplatform.com",
-  phoneDisplay: "+1 (929) 453-7790",
-  phoneHref: "+19294537790",
-};
+export type Lang = "fr" | "en";
 
 const hrefs = {
   website: `https://${BRAND.domain}`,
   mailto: `mailto:${BRAND.email}?subject=${encodeURIComponent("RELAIS — Nouvelle demande")}`,
   tel: `tel:${BRAND.phoneHref}`,
+  whatsapp: `https://wa.me/${BRAND.phoneHref}?text=${encodeURIComponent(
+    "Bonjour RELAIS...",
+  )}`,
 };
 
 const HERO_IMAGE = "/images/relais-hero.png";
-
-const COPY = {
-  fr: {
-    nav: {
-      how: "Comment ça marche",
-      services: "Services",
-      trust: "Confiance",
-      pricing: "Tarifs",
-      submit: "Démarrer une demande",
-    },
-    hero: {
-      eyebrow: "SERVICE DE COORDINATION & ASSISTANCE",
-      h1: "Quand vous êtes loin, nous prenons le relais.",
-      sub: "Soumettez une demande. Nous affectons un coordinateur local vérifié. Vous recevez des preuves (photos/vidéos) et des mises à jour claires jusqu’à la fin.",
-      ctaPrimary: "Démarrer une demande",
-      ctaSecondary: "Comment ça marche ?",
-      pills: [
-        {
-          title: "Coordination réelle",
-          desc: "Actions concrètes sur le terrain",
-        },
-        {
-          title: "Confirmation claire",
-          desc: "Rien n’avance sans votre accord",
-        },
-        {
-          title: "Preuves, pas de promesses",
-          desc: "Photos et reçus à chaque étape",
-        },
-      ],
-      exampleTitle: "Exemple de suivi",
-      requestLabel: "DEMANDE",
-      requestTitle: "Payer des frais de scolarité & confirmer l’inscription",
-      requestMeta: "Ville : Ouagadougou • Urgence : normale",
-      status: "Affectée",
-      proofLabel: "PREUVES",
-      proofHint: "3 éléments joints",
-      updateLabel: "MISE À JOUR",
-      updateText:
-        "Le coordinateur a visité l’école, confirmé l’inscription et envoyé reçu + rapport pour validation.",
-      flowHint: "Suivi : En attente → Affectée → En cours → Terminée",
-    },
-    how: {
-      eyebrow: "COMMENT ÇA MARCHE",
-      title: "Simple. Structuré. Responsable.",
-      subtitle: "Des étapes claires, du début à la fin — sans confusion.",
-      steps: [
-        {
-          step: "01",
-          title: "Vous expliquez le besoin",
-          desc: "Dites ce que vous voulez, où, et le niveau d’urgence.",
-        },
-        {
-          step: "02",
-          title: "Nous confirmons les détails",
-          desc: "Nous validons le plan et le devis avant toute action.",
-        },
-        {
-          step: "03",
-          title: "Nous gérons sur place",
-          desc: "Un coordinateur local exécute et documente l’avancement.",
-        },
-      ],
-      note: "Vous ne recrutez pas un inconnu. Vous passez par RELAIS — avec suivi, validation et preuves.",
-    },
-    services: {
-      eyebrow: "CE QUE NOUS PRENONS EN CHARGE",
-      title: "Des besoins diaspora, gérés avec preuves",
-      subtitle:
-        "Quelques exemples. Si ce n’est pas listé, soumettez quand même.",
-      cards: [
-        {
-          title: "Gérer une tâche",
-          items: [
-            "Paiements / dépôts",
-            "Suivis de réparation",
-            "Rendez-vous & démarches",
-          ],
-        },
-        {
-          title: "Soutenir ma famille",
-          items: ["Frais de scolarité", "Documents", "Courses & assistance"],
-        },
-        {
-          title: "Acheter & livrer",
-          items: [
-            "Matériaux & fournitures",
-            "Livraison vérifiée",
-            "Reçus & photos",
-          ],
-        },
-        {
-          title: "Maison & propriété",
-          items: ["Inspection", "Avancement travaux", "Photos avant / après"],
-        },
-        {
-          title: "Vérification locale",
-          items: [
-            "Contrôles sur place",
-            "“Est-ce vrai ?”",
-            "Confirmation indépendante",
-          ],
-        },
-        {
-          title: "Demandes sur mesure",
-          items: [
-            "Nous évaluons la faisabilité",
-            "Vous validez le devis",
-            "Exécution + rapport",
-          ],
-        },
-      ],
-    },
-    trust: {
-      eyebrow: "CONFIANCE & SÉCURITÉ",
-      title: "Conçu pour la confiance",
-      subtitle:
-        "La confiance vient de la transparence, du suivi et des preuves.",
-      bullets: [
-        {
-          title: "Coordinateurs vérifiés",
-          desc: "Les coordinateurs sont approuvés avant d’être affectés.",
-        },
-        {
-          title: "Demandes suivies",
-          desc: "Statuts clairs + mises à jour tout au long du processus.",
-        },
-        {
-          title: "Support humain",
-          desc: `Contact : ${BRAND.email} • ${BRAND.phoneDisplay}`,
-        },
-        {
-          title: "Revue & résolution",
-          desc: "En cas de doute, RELAIS vérifie et résout avec vous.",
-        },
-      ],
-    },
-    pricing: {
-      eyebrow: "TARIFS",
-      title: "Devis transparent, par demande",
-      subtitle: "Vous voyez le devis avant toute action.",
-      cards: [
-        {
-          title: "Frais de service",
-          desc: "Coordination, suivi et vérification.",
-          note: "Devis par demande",
-        },
-        {
-          title: "Coût d’exécution",
-          desc: "Temps + frais locaux si nécessaire.",
-          note: "Devis par demande",
-        },
-      ],
-      note: "MVP : accusé de réception le jour même, puis devis après confirmation des détails.",
-    },
-    cta: {
-      eyebrow: "PRÊT À COMMENCER ?",
-      title: "Démarrez une demande aujourd’hui.",
-      sub: "Envoyez votre besoin par email. Nous répondons avec les prochaines étapes et un devis.",
-      emailBtn: "Envoyer une demande par email",
-      callBtn: `Appeler ${BRAND.phoneDisplay}`,
-      templateTitle: "Modèle à copier/coller",
-      template: [
-        ["Type de service", "(ex: frais de scolarité / inspection)"],
-        ["Ville + pays", ""],
-        ["Détails", ""],
-        ["Urgence", "Normale / Urgente"],
-        ["Meilleur contact", "Email / Téléphone"],
-      ],
-      templateHint: `À envoyer à ${BRAND.email}`,
-      small: "Formulaire web sécurisé (prochaine itération).",
-    },
-    footer: {
-      line: "Coordination fiable. Exécution réelle. Preuves vérifiées.",
-    },
-  },
-
-  en: {
-    nav: {
-      how: "How it works",
-      services: "Services",
-      trust: "Trust",
-      pricing: "Pricing",
-      submit: "Start a request",
-    },
-    hero: {
-      eyebrow: "COORDINATION & ASSISTANCE SERVICE",
-      h1: "When you’re far away, we take the relay.",
-      sub: "Submit a request. We assign a verified local coordinator. You receive proof (photos/videos) and clear updates until completion.",
-      ctaPrimary: "Start a request",
-      ctaSecondary: "How it works",
-      pills: [
-        { title: "Real coordination", desc: "On-the-ground execution" },
-        { title: "Clear confirmation", desc: "Nothing moves without approval" },
-        {
-          title: "Proof, not promises",
-          desc: "Photos & receipts when relevant",
-        },
-      ],
-      exampleTitle: "Example status update",
-      requestLabel: "REQUEST",
-      requestTitle: "Pay school fees & confirm enrollment",
-      requestMeta: "City: Ouagadougou • Urgency: normal",
-      status: "Assigned",
-      proofLabel: "PROOF",
-      proofHint: "3 items attached",
-      updateLabel: "UPDATE",
-      updateText:
-        "Coordinator visited the school, confirmed enrollment, and sent receipt + report for your review.",
-      flowHint: "Tracked: Pending → Assigned → In progress → Completed",
-    },
-    how: {
-      eyebrow: "HOW IT WORKS",
-      title: "Simple. Structured. Accountable.",
-      subtitle: "Clear steps from submission to completion.",
-      steps: [
-        {
-          step: "01",
-          title: "You explain the need",
-          desc: "Tell us what you need, where, and urgency.",
-        },
-        {
-          step: "02",
-          title: "We confirm the details",
-          desc: "We confirm plan + quote before any action.",
-        },
-        {
-          step: "03",
-          title: "We execute on the ground",
-          desc: "A local coordinator executes and documents progress.",
-        },
-      ],
-      note: "You’re not hiring strangers. You’re working through RELAIS with tracking and proof.",
-    },
-    services: {
-      eyebrow: "WHAT WE HANDLE",
-      title: "Diaspora needs, managed with proof",
-      subtitle: "Examples. If it’s not listed, submit anyway.",
-      cards: [
-        {
-          title: "Handle a task",
-          items: [
-            "Payments / deposits",
-            "Repair follow-ups",
-            "Appointments & errands",
-          ],
-        },
-        {
-          title: "Support family",
-          items: ["School fees", "Documents", "Assistance"],
-        },
-        {
-          title: "Buy & deliver",
-          items: [
-            "Materials & supplies",
-            "Verified delivery",
-            "Receipts & photos",
-          ],
-        },
-        {
-          title: "Home & property",
-          items: ["Inspection", "Renovation checks", "Before/after proof"],
-        },
-        {
-          title: "Local verification",
-          items: [
-            "On-ground checks",
-            "“Is it real?”",
-            "Independent confirmation",
-          ],
-        },
-        {
-          title: "Custom requests",
-          items: [
-            "We confirm feasibility",
-            "You approve the quote",
-            "Execution + report",
-          ],
-        },
-      ],
-    },
-    trust: {
-      eyebrow: "TRUST & SAFETY",
-      title: "Built for trust",
-      subtitle: "Trust comes from transparency, tracking, and proof.",
-      bullets: [
-        {
-          title: "Verified coordinators",
-          desc: "Coordinators are approved before assignments.",
-        },
-        {
-          title: "Tracked requests",
-          desc: "Clear statuses + updates along the way.",
-        },
-        {
-          title: "Human support",
-          desc: `Reach us at ${BRAND.email} • ${BRAND.phoneDisplay}`,
-        },
-        {
-          title: "Review & resolution",
-          desc: "If something feels off, RELAIS reviews and resolves with you.",
-        },
-      ],
-    },
-    pricing: {
-      eyebrow: "PRICING",
-      title: "Transparent, request-based quotes",
-      subtitle: "You see the quote before any work begins.",
-      cards: [
-        {
-          title: "Service fee",
-          desc: "Coordination, tracking, verification.",
-          note: "Quoted per request",
-        },
-        {
-          title: "Execution cost",
-          desc: "Time + local expenses when needed.",
-          note: "Quoted per request",
-        },
-      ],
-      note: "MVP: same-day acknowledgment, then a quote after details are confirmed.",
-    },
-    cta: {
-      eyebrow: "READY TO START?",
-      title: "Submit a request today.",
-      sub: "Email your need. We’ll reply with next steps and a quote.",
-      emailBtn: "Email a request",
-      callBtn: `Call ${BRAND.phoneDisplay}`,
-      templateTitle: "Copy/paste template",
-      template: [
-        ["Service type", "(e.g., school fees / inspection)"],
-        ["City + country", ""],
-        ["Details", ""],
-        ["Urgency", "Normal / Urgent"],
-        ["Best contact", "Email / Phone"],
-      ],
-      templateHint: `Send to ${BRAND.email}`,
-      small: "Secure web request form (next iteration).",
-    },
-    footer: {
-      line: "Trusted coordination. Real execution. Verified proof.",
-    },
-  },
-} as const;
 
 export default function HomePage1() {
   const [lang, setLang] = useState<Lang>("fr");
   const t = useMemo(() => COPY[lang], [lang]);
 
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
+    <main className="min-h-screen bg-[rgb(var(--canvas))] text-[rgb(var(--ink))]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10"
+      >
+        <div className="absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x1/2 rounded-full bg-radial from-emerald-400/18 via-sky-400/10 to-transparent blur-3xl" />
+        <div className="absolute bottom-[-180px] left-[-180px] h-[520px] w-[520px] rounded-full bg-radial from-emerald-400/10 via-transparent to-transparent blur-3xl" />
+        <div />
+      </div>
       <Header lang={lang} setLang={setLang} t={t} />
 
       {/* HERO with background image */}
-      <section className="relative overflow-hidden">
+      <section id="hero" className="relative overflow-hidden">
         {/* Background image */}
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center scale-[1.03]"
           style={{ backgroundImage: `url(${HERO_IMAGE})` }}
           aria-hidden="true"
         />
@@ -449,73 +110,184 @@ export default function HomePage1() {
                   <span className="text-white/80">{BRAND.domain}</span>
                 </div>
               </div>
+              {/* Trust panel (human, not admin) */}
+              <div className="rounded-2xl bg-white/20 p-6 shadow-md ring-1 ring-white/50 backdrop-blur">
+                {/* Header */}
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-white/90 bg-white/15 w-fit px-3 py-2 rounded-2xl ring-white/20">
+                      {lang === "fr"
+                        ? "Aperçu d’une demande réelle"
+                        : "Real request preview"}
+                    </p>
+                    <p className="mt-2 text-sm text-white/80">
+                      {lang === "fr"
+                        ? "Vous restez en contrôle. RELAIS exécute sur place avec preuves."
+                        : "You stay in control. RELAIS executes locally with proof."}
+                    </p>
+                  </div>
 
-              {/* Example card (on light surface for contrast) */}
-              <div className="rounded-2xl border border-white/20 bg-white/90 p-6 shadow-sm backdrop-blur">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-neutral-800">
-                    {t.hero.exampleTitle}
-                  </p>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-neutral-700 ring-1 ring-neutral-200">
-                    Request ID: RL-1042
+                  {/* Status chip */}
+                  <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-900 ring-1 ring-emerald-900/10">
+                    <span className="h-2 w-2 rounded-full bg-[rgb(var(--accent))]" />
+                    {lang === "fr" ? "Suivi actif" : "Live tracking"}
                   </span>
                 </div>
 
-                <div className="mt-5 rounded-xl bg-white p-4 ring-1 ring-neutral-200">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-xs font-semibold text-neutral-500">
-                        {t.hero.requestLabel}
-                      </p>
-                      <p className="mt-1 text-sm font-semibold">
-                        {t.hero.requestTitle}
-                      </p>
-                      <p className="mt-1 text-sm text-neutral-600">
-                        {t.hero.requestMeta}
-                      </p>
-                    </div>
-
-                    <span className="rounded-full bg-neutral-900 px-3 py-1 text-xs font-semibold text-white">
-                      {t.hero.status}
-                    </span>
-                  </div>
-
-                  <div className="mt-4 border-t border-neutral-200 pt-4">
-                    <p className="text-xs font-semibold text-neutral-500">
-                      {t.hero.proofLabel}
+                {/* Body */}
+                <div className="mt-5 grid gap-4">
+                  {/* What the client requested */}
+                  <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-neutral-200/70">
+                    <p className="text-xs font-semibold tracking-widest text-neutral-500">
+                      {lang === "fr" ? "VOTRE DEMANDE" : "YOUR REQUEST"}
+                    </p>
+                    <p className="mt-2 text-base font-semibold text-neutral-900">
+                      {t.hero.requestTitle}
+                    </p>
+                    <p className="mt-1 text-sm text-neutral-600">
+                      {t.hero.requestMeta}
                     </p>
 
-                    <div className="mt-2 flex items-center gap-2">
+                    {/* Control promise */}
+                    <div className="mt-4 rounded-xl bg-neutral-50 p-4 ring-1 ring-neutral-200/60">
+                      <p className="text-sm font-semibold text-neutral-900">
+                        {lang === "fr"
+                          ? "Règle RELAIS : rien n’avance sans votre validation."
+                          : "RELAIS rule: nothing moves without your approval."}
+                      </p>
+                      <p className="mt-1 text-sm text-neutral-600">
+                        {lang === "fr"
+                          ? "Nous confirmons le plan + devis, puis on exécute."
+                          : "We confirm plan + quote, then we execute."}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Proof + updates
+                  <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-neutral-200/70">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-xs font-semibold tracking-widest text-neutral-500">
+                          {lang === "fr"
+                            ? "PREUVES & MISES À JOUR"
+                            : "PROOF & UPDATES"}
+                        </p>
+                        <p className="mt-2 text-sm text-neutral-700">
+                          {t.hero.updateText}
+                        </p>
+                      </div>
+
+                      <span className="shrink-0 rounded-full bg-neutral-900 px-3 py-1 text-xs font-semibold text-white">
+                        {t.hero.status}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap items-center gap-2">
                       <ProofThumb label={lang === "fr" ? "Photo" : "Photo"} />
                       <ProofThumb label={lang === "fr" ? "Reçu" : "Receipt"} />
                       <ProofThumb
                         label={lang === "fr" ? "Rapport" : "Report"}
                       />
-                      <span className="ml-2 text-sm text-neutral-600">
+                      <span className="ml-1 text-sm text-neutral-600">
                         {t.hero.proofHint}
                       </span>
                     </div>
+
+                    <div className="mt-4 text-xs text-neutral-500">
+                      {t.hero.flowHint}
+                    </div>
+                  </div> */}
+                </div>
+
+                {/* Contact strip */}
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-emerald-50 p-4 ring-1 ring-emerald-900/10">
+                  <p className="text-sm font-semibold text-neutral-900">
+                    {lang === "fr"
+                      ? "Réponse rapide via WhatsApp ou appel"
+                      : "Fast response via WhatsApp or call"}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    <a
+                      href={hrefs.whatsapp}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500"
+                    >
+                      {lang === "fr" ? "WhatsApp" : "WhatsApp"}
+                    </a>
+                    <a
+                      href={hrefs.tel}
+                      className="inline-flex items-center justify-center rounded-xl bg-white px-4 py-2 text-sm font-semibold text-neutral-900 ring-1 ring-emerald-900/10 hover:bg-emerald-100/30"
+                    >
+                      {lang === "fr"
+                        ? `Appeler ${BRAND.phoneDisplay}`
+                        : `Call ${BRAND.phoneDisplay}`}
+                    </a>
                   </div>
-                </div>
-
-                <div className="mt-5 rounded-xl bg-white p-4 ring-1 ring-neutral-200">
-                  <p className="text-xs font-semibold text-neutral-500">
-                    {t.hero.updateLabel}
-                  </p>
-                  <p className="mt-1 text-sm text-neutral-700">
-                    {t.hero.updateText}
-                  </p>
-                </div>
-
-                <div className="mt-5 text-xs text-neutral-500">
-                  {t.hero.flowHint}
                 </div>
               </div>
             </div>
           </div>
 
           {/* soft fade into white below hero */}
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-linear-to-b from-transparent to-white" />
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-linear-to-b from-transparent to-white" />
+        </div>
+      </section>
+
+      {/* PROBLEM */}
+      <section id="problem" className="scroll-mt-24 bg-[rgb(var(--surface-2))]">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <SectionHeading
+            eyebrow={t.problem.eyebrow}
+            title={t.problem.title}
+            subtitle={
+              lang === "fr"
+                ? "RELAIS existe pour enlever le doute — avec un processus et des preuves."
+                : "RELAIS exists to remove uncertainty — with process and proof."
+            }
+          />
+
+          <div className="mt-8 grid gap-3 md:grid-cols-2">
+            {t.problem.bullets.map((b) => (
+              <div
+                key={b}
+                className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
+              >
+                <p className="text-sm text-neutral-800">{b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SOLUTION */}
+      <section
+        id="solution"
+        className="border-t border-[rgb(var(--border))]/10 bg-[rgb(var(--canvas))] scroll-mt-24"
+      >
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <SectionHeading
+            eyebrow={t.solution.eyebrow}
+            title={t.solution.title}
+            subtitle={t.solution.subtitle}
+          />
+
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {t.solution.cards.map((c) => (
+              <div
+                key={c.title}
+                className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
+              >
+                <p className="text-xs font-semibold tracking-widest text-neutral-500">
+                  {c.title.toUpperCase()}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-neutral-700">
+                  {c.desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -584,8 +356,8 @@ export default function HomePage1() {
 
       {/* PRICING */}
       <section
-        id="pricing"
-        className="border-t border-neutral-200 bg-neutral-50 scroll-mt-24"
+        id="services"
+        className="border-t border-[rgb(var(--border))]/10 bg-[rgb(var(--surface-2))] scroll-mt-24"
       >
         <div className="mx-auto max-w-6xl px-4 py-14">
           <SectionHeading
@@ -608,6 +380,39 @@ export default function HomePage1() {
           <p className="mt-6 max-w-3xl text-sm text-neutral-600">
             {t.pricing.note}
           </p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="scroll-mt-24">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <SectionHeading
+            eyebrow={t.faq.eyebrow}
+            title={t.faq.title}
+            subtitle={t.faq.subtitle}
+          />
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            {t.faq.items.map((it) => (
+              <details
+                key={it.q}
+                className="group rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
+              >
+                <summary className="cursor-pointer list-none font-semibold text-neutral-900">
+                  <span className="mr-2 inline-block rounded-full bg-neutral-900 px-2 py-1 text-xs font-semibold text-white">
+                    ?
+                  </span>
+                  {it.q}
+                  <span className="float-right text-neutral-400 group-open:rotate-180 transition">
+                    ▾
+                  </span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-neutral-600">
+                  {it.a}
+                </p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -686,14 +491,26 @@ function Header({
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <Link href="/" className="flex items-center gap-2">
+        {/* <Link href="/#hero" className="flex items-center gap-2">
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-neutral-900 text-sm font-bold text-white">
             R
           </span>
           <span className="font-semibold tracking-tight">{BRAND.name}</span>
+        </Link> */}
+        <Link href="/#hero" className="flex items-center gap-3">
+          <Image
+            src="/logo.jpg"
+            alt="Relais"
+            width={50}
+            height={30}
+            className="rounded-full"
+          />
         </Link>
 
         <nav className="hidden items-center gap-5 text-sm text-neutral-700 md:flex">
+          <a className="hover:text-neutral-900" href="#problem">
+            {t.nav.problem}
+          </a>
           <a className="hover:text-neutral-900" href="#how">
             {t.nav.how}
           </a>
@@ -705,6 +522,9 @@ function Header({
           </a>
           <a className="hover:text-neutral-900" href="#pricing">
             {t.nav.pricing}
+          </a>
+          <a className="hover:text-neutral-900" href="#faq">
+            {t.nav.faq}
           </a>
         </nav>
 
@@ -735,7 +555,7 @@ function LangToggle({
         type="button"
         onClick={() => setLang("fr")}
         className={[
-          "rounded-lg px-3 py-1 text-xs font-semibold",
+          "rounded-lg px-3 py-1 text-xs font-semibold cursor-pointer",
           lang === "fr"
             ? "bg-neutral-900 text-white"
             : "text-neutral-700 hover:bg-neutral-50",
@@ -748,7 +568,7 @@ function LangToggle({
         type="button"
         onClick={() => setLang("en")}
         className={[
-          "rounded-lg px-3 py-1 text-xs font-semibold",
+          "rounded-lg px-3 py-1 text-xs font-semibold cursor-pointer",
           lang === "en"
             ? "bg-neutral-900 text-white"
             : "text-neutral-700 hover:bg-neutral-50",
@@ -828,7 +648,13 @@ function StepCard({
   );
 }
 
-function ServiceCard({ title, items }: { title: string; items: string[] }) {
+function ServiceCard({
+  title,
+  items,
+}: {
+  title: string;
+  items: readonly string[];
+}) {
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
       <p className="text-lg font-semibold">{title}</p>
@@ -873,13 +699,13 @@ function PricingCard({
   );
 }
 
-function ProofThumb({ label }: { label: string }) {
-  return (
-    <div className="inline-flex h-9 w-14 items-center justify-center rounded-lg bg-neutral-100 text-xs font-semibold text-neutral-700 ring-1 ring-neutral-200">
-      {label}
-    </div>
-  );
-}
+// function ProofThumb({ label }: { label: string }) {
+//   return (
+//     <div className="inline-flex h-9 w-14 items-center justify-center rounded-lg bg-neutral-100 text-xs font-semibold text-neutral-700 ring-1 ring-neutral-200">
+//       {label}
+//     </div>
+//   );
+// }
 
 function Footer({ t }: { t: (typeof COPY)[Lang] }) {
   return (
@@ -887,7 +713,7 @@ function Footer({ t }: { t: (typeof COPY)[Lang] }) {
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-semibold">{BRAND.name}</p>
+            <Image src="/logo.jpg" alt="Relais" width={50} height={20} />
             <p className="mt-1 text-sm text-neutral-600">{t.footer.line}</p>
           </div>
 
@@ -903,6 +729,12 @@ function Footer({ t }: { t: (typeof COPY)[Lang] }) {
               href={hrefs.tel}
             >
               {BRAND.phoneDisplay}
+            </a>
+            <a
+              className="underline underline-offset-4 hover:text-neutral-900"
+              href={hrefs.whatsapp}
+            >
+              WhatsApp
             </a>
             <a
               className="underline underline-offset-4 hover:text-neutral-900"
