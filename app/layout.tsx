@@ -16,6 +16,11 @@ export const metadata: Metadata = {
   title: "RELAIS | Trusted Local Coordination & Remote Assistance",
   description:
     "Need trusted help executed locally while you’re abroad? RELAIS manages on-site services, family assistance, and verified tasks with full transparency and proof.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({

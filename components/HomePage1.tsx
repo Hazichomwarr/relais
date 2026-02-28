@@ -499,9 +499,9 @@ function Header({
         </Link> */}
         <Link href="/#hero" className="flex items-center gap-3">
           <Image
-            src="/logo.jpg"
+            src="/relais_icon.png"
             alt="Relais"
-            width={50}
+            width={80}
             height={30}
             className="rounded-full"
           />
