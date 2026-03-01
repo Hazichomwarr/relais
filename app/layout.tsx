@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RELAIS | Trusted Local Coordination & Remote Assistance",
+  title: "RELAIS | Coordination locale de confiance et assistance à distance",
   description:
-    "Need trusted help executed locally while you’re abroad? RELAIS manages on-site services, family assistance, and verified tasks with full transparency and proof.",
+    "Besoin d'une aide fiable et locale,  Parcque vous êtes loin de chez vous ? RELAIS gère les services sur place, l'assistance familiale et les tâches vérifiées en toute transparence et avec preuves à l'appui.",
   icons: {
     icon: "/icon.png",
     shortcut: "/icon.png",
