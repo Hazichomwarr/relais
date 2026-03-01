@@ -29,9 +29,9 @@ export default function HomePage1() {
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
       >
-        <div className="absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x1/2 rounded-full bg-radial from-emerald-400/18 via-sky-400/10 to-transparent blur-3xl" />
+        {/* <div className="absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x1/2 rounded-full bg-radial from-emerald-400/18 via-sky-400/10 to-transparent blur-3xl" />
         <div className="absolute bottom-[-180px] left-[-180px] h-[520px] w-[520px] rounded-full bg-radial from-emerald-400/10 via-transparent to-transparent blur-3xl" />
-        <div />
+        <div /> */}
       </div>
       <Header lang={lang} setLang={setLang} t={t} />
 
@@ -491,12 +491,6 @@ function Header({
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        {/* <Link href="/#hero" className="flex items-center gap-2">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-neutral-900 text-sm font-bold text-white">
-            R
-          </span>
-          <span className="font-semibold tracking-tight">{BRAND.name}</span>
-        </Link> */}
         <Link href="/#hero" className="flex items-center gap-3">
           <Image
             src="/relais_icon.png"
@@ -530,12 +524,12 @@ function Header({
 
         <div className="flex items-center gap-3">
           <LangToggle lang={lang} setLang={setLang} />
-          <a
+          {/* <a
             href="#request"
             className="inline-flex items-center justify-center rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-800"
           >
             {t.nav.submit}
-          </a>
+          </a> */}
         </div>
       </div>
     </header>
