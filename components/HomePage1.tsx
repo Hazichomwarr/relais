@@ -445,6 +445,12 @@ export default function HomePage1() {
                 >
                   {t.cta.callBtn}
                 </a>
+                <a
+                  href="/request"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/30 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
+                >
+                  Request online
+                </a>
               </div>
 
               <p className="mt-6 text-sm text-neutral-300">{t.cta.small}</p>
